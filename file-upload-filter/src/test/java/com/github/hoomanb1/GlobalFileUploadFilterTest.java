@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ public class GlobalFileUploadFilterTest {
     public void testPreventsJavaSerializedFileUpload() throws IOException {
         System.setProperty("file.upload.filter", "signature=D0CF11E0A1B11AE1,offset=2,maxSize=250kb");
         GlobalFileUploadFilter uploadFilter = GlobalFileUploadFilter.newFileUploadFilter();
-        Button serializedObject = new Button();
+        CarTest serializedObject = new CarTest();
         byte[] bytes = serialize(serializedObject);
         assertFalse(uploadFilter.accept(bytes, uploadFilter.getFilterConfig()));
     }
@@ -28,7 +27,7 @@ public class GlobalFileUploadFilterTest {
     public void testAllowsJavaSerializedFileUpload() throws IOException {
         System.setProperty("file.upload.filter", "signature=ACED,offset=0,maxSize=1kb");
         GlobalFileUploadFilter uploadFilter = GlobalFileUploadFilter.newFileUploadFilter();
-        Button serializedObject = new Button();
+        CarTest serializedObject = new CarTest();
         byte[] bytes = serialize(serializedObject);
         assertTrue(uploadFilter.accept(bytes, uploadFilter.getFilterConfig()));
     }
@@ -58,18 +57,18 @@ public class GlobalFileUploadFilterTest {
 
     @Test
     public void testAllowsJavaSerializedFileExceedsFileSizeUpload() throws IOException {
-        System.setProperty("file.upload.filter", "signature=ACED,offset=0,maxSize=100bytes");
+        System.setProperty("file.upload.filter", "signature=ACED,offset=0,maxSize=47bytes");
         GlobalFileUploadFilter uploadFilter = GlobalFileUploadFilter.newFileUploadFilter();
-        Button serializedObject = new Button();
+        CarTest serializedObject = new CarTest();
         byte[] bytes = serialize(serializedObject);
         assertFalse(uploadFilter.accept(bytes, uploadFilter.getFilterConfig()));
     }
 
     @Test
     public void testGetsFileSize() throws IOException {
-        Button serializedObject = new Button();
+        CarTest serializedObject = new CarTest();
         byte[] bytes = serialize(serializedObject);
-        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(bytes.length));
+        assertEquals("48 bytes", FileUtils.byteCountToDisplaySize(bytes.length));
     }
 
     @Test
@@ -192,7 +191,7 @@ public class GlobalFileUploadFilterTest {
 
     @Test
     public void testAsciiContent_1() throws IOException {
-        Button serializedObject = new Button();
+        CarTest serializedObject = new CarTest();
         byte[] bytes = serialize(serializedObject);
         byte[] buffer = new byte[512];
         boolean isAscii = true;
